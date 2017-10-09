@@ -28,7 +28,7 @@ if args.config == 'release':
 
 lovejs = os.environ.get('LOVEJS', os.path.abspath('../love.js/'))
 out_dir = os.path.join('dist', args.config)
-in_dir = 'src'
+in_dir = '.'
 
 
 if args.command == 'build':
