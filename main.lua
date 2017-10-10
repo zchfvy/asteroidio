@@ -28,12 +28,17 @@ function connecting:update(dt)
         net_timer = net_timer - dt -- always delay at least one frame
     else
         net_timer = join_retransmit
+        print('Attempting Connection...')
         net_send('join 0') --- ping in order to say hello
         repeat
             data, msg = net_recv()
             if data then
                 -- Todo, ensure we get valid "Hello" from server
-                client_id = tonumber(data)
+                client_id, wx, wy = data:match('^(%S*) (%S*) (%S*)')
+                client_id = tonumber(client_id)
+                wx, wy = tonumber(wx), tonumber(wy)
+                world = World(wx, wy)
+                love.window.setMode(wx, wy)
                 print('Connected as '..client_id)
                 Gamestate.switch(game)
             end
@@ -48,7 +53,6 @@ end
 
 function game:enter()
     print('entering gamestate')
-    world = World()
     net_sendfmt('input spawn 0')
 
     t = 0

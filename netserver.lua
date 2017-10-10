@@ -5,7 +5,8 @@ local World = require 'src.world'
 
 NET_DEBUG = false
 
-world = World()
+world_x, world_y = 600, 600
+world = World(world_x, world_y)
 
 
 function send(ws, msg)
@@ -33,7 +34,7 @@ function run_websock(ws)
             end
 
             if cmd == 'join' then
-                sendfmt(ws, '%d', ws.id)
+                sendfmt(ws, '%d %d %d', ws.id, world_x, world_y)
             elseif ws.id == nil then
                 send(ws, 'ERROR: unjoined client')
             elseif cmd == 'input' then
@@ -57,6 +58,7 @@ local server = websocket.server.copas.listen{
     }
 }
 
+print('Starting Server')
 while true do
     running = true
     copas.step(0.1)
