@@ -7,12 +7,18 @@ World = Class{}
 
 function World:init(w, h)
     self.ships = {}
+    self.w = w
+    self.h = h
 end
 
 function World:update(dt)
     -- Update the simulation
     for _, ship in pairs(self.ships) do
         ship:update(dt)
+        if ship.p.x > self.w then ship.p.x = ship.p.x - self.w end
+        if ship.p.x < 0      then ship.p.x = ship.p.x + self.w end
+        if ship.p.y > self.h then ship.p.y = ship.p.y - self.h end
+        if ship.p.y < 0      then ship.p.y = ship.p.y + self.h end
     end
 end
 
