@@ -45,7 +45,9 @@ function run_websock(ws)
                 end
             end
         else
+            print(string.format('Client %s disconnected', ws.id))
             ws:close()
+            return
         end
     end
 end
