@@ -1,5 +1,6 @@
 local copas = require('copas')
 local websocket = require('websocket')
+require "socket"
 
 local World = require 'src.world'
 
@@ -7,6 +8,8 @@ NET_DEBUG = false
 
 world_x, world_y = 600, 600
 world = World(world_x, world_y)
+
+server_update_rate = 1/20
 
 
 function send(ws, msg)
@@ -52,6 +55,9 @@ function run_websock(ws)
     end
 end
 
+function server_update(dt)
+    world:update(dt)
+end
 
 local server = websocket.server.copas.listen{
     port = 8089,
@@ -61,10 +67,17 @@ local server = websocket.server.copas.listen{
 }
 
 print('Starting Server')
+
+t0 = socket.gettime()
 while true do
     running = true
-    copas.step(0.1)
+    copas.step(server_update_rate)
     running = false
 
-    world:update(0.1)
+    t1 = socket.gettime()
+    dt = t1 - t0
+
+    server_update(dt)
+
+    t0 = t1
 end
