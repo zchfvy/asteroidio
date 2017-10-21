@@ -20,6 +20,7 @@ parser.add_argument('--config',
                              'release-performance'],
                     default='debug',
                     help='Configuration to build')
+parser.add_argument('--port', type=int, default=5000)
 
 args = parser.parse_args()
 
@@ -55,13 +56,13 @@ if args.command == 'run':
     os.chdir(out_dir)
 
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    httpd = SocketServer.TCPServer(("", 5000), Handler)
-    print("Serving on port 5000")
+    httpd = SocketServer.TCPServer(("", args.port), Handler)
+    print("Serving on port {}".format(args.port))
     t = threading.Thread(target=httpd.serve_forever, args=())
     t.daemon = True
     t.start()
 
-    webbrowser.open('http://localhost:5000', new=2)
+    webbrowser.open('http://localhost:{}'.format(args.port), new=2)
 
     try:
         while True:
