@@ -2,7 +2,7 @@ local copas = require('copas')
 local websocket = require('websocket')
 require "socket"
 
-local World = require 'src.world'
+local World = require 'game.world'
 
 NET_DEBUG = false
 
@@ -48,7 +48,9 @@ function run_websock(ws)
                 end
             end
         else
-            print(string.format('Client %s disconnected', ws.id))
+            if ws.id ~= nil then
+                print(string.format('Client %s disconnected', ws.id))
+            end
             ws:close()
             return
         end

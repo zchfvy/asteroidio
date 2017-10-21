@@ -2,7 +2,7 @@
 Gamestate = require "hump.gamestate"
 require "netclient"
 
-World = require "src.world"
+World = require "game.world"
 
 local connecting = {}
 local menu = {}  -- TODO: No menu state implemented yet!

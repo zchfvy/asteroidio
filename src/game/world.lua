@@ -1,7 +1,7 @@
 
 Class = require "hump.class"
 
-Ship = require "src.ship"
+Ship = require "game.ship"
 
 World = Class{}
 
