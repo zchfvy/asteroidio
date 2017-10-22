@@ -35,8 +35,8 @@ end
 
 function World:net_update(data)
     -- Receives a packet from the net (clients only!)
-    cmd, ent, params = data:match('^(%S*) (%S*) (.*)')
-    ent = tonumber(ent)
+    local cmd, ent, params = data:match('^(%S*) (%S*) (.*)')
+    local ent = tonumber(ent)
 
     if cmd == 'up_ship' then
         if self.ships[ent] == nil then
@@ -51,9 +51,9 @@ end
 
 function World:client_msg(user, data)
     -- Receives a packet from the net (server only!)
-    cmd, params = data:match('^(%S*) (.*)')
+    local cmd, params = data:match('^(%S*) (.*)')
     if cmd == 'ship_ctrl' then
-        turn, thrust = params:match('^(%-?[%de.]*) (%-?[%de.]*)')
+        local turn, thrust = params:match('^(%-?[%de.]*) (%-?[%de.]*)')
         self.ships[user].thrust = tonumber(thrust)
         self.ships[user].turn = tonumber(turn)
     end

@@ -24,7 +24,7 @@ function net_sendfmt(fmt, ...)
 end
 
 function net_recv()
-    msg =  tcp:receive('*l')
+    local msg =  tcp:receive('*l')
     if NET_DEBUG and msg then
         print('<<<'..msg)
     end

@@ -25,14 +25,15 @@ end
 
 function run_websock(ws)
     while running do
-        data = ws:receive()
+        local data = ws:receive()
         if data then
             if NET_DEBUG then
                 print('<<<'..data)
             end
-            cmd, params = data:match('^(%S*) (.*)')
+            local cmd, params = data:match('^(%S*) (.*)')
             if cmd == 'join' and ws.id == nil then
                 ws.id = math.random(999999)
+                ws.actors = {}
                 print('New Client '..ws.id)
             end
 

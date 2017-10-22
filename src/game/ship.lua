@@ -17,7 +17,7 @@ end
 
 function Ship:update(dt)
     self.rot = self.rot + self.turn * dt
-    accel = vector.fromPolar(self.rot, self.thrust)
+    local accel = vector.fromPolar(self.rot, self.thrust)
     self.v = self.v + accel * dt
     self.p = self.p + self.v * dt
 end
@@ -32,10 +32,9 @@ end
 
 function Ship:deserialize(srl)
     -- TODO: Lag correction/prediction here!
-    px, py, vx, vy, rot, thrust = srl:match(
+    local px, py, vx, vy, rot, thrust = srl:match(
         '^(%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*)$')
 
-    -- TODO: Does pattern-matching into an attribute even work?
     self.p.x, self.p.y = tonumber(px), tonumber(py)
     self.v.x, self.v.y = tonumber(vx), tonumber(vy)
 

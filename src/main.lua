@@ -61,13 +61,13 @@ end
 function game:update(dt)
     world:update(dt)
 
+    local turn, thrust = 0, 0
+
     if world.ships[client_id] ~= nil then
-        thrust = 0
         if love.keyboard.isDown('up') then thrust = thrust + 50
         end
         world.ships[client_id].thrust = thrust
 
-        turn = 0
         if     love.keyboard.isDown('left')  then turn = turn - 1.5
         elseif love.keyboard.isDown('right') then turn = turn + 1.5
         end
@@ -85,6 +85,7 @@ function game:update(dt)
         t = t - updaterate
     end
 
+    local data, msg
     repeat
         data, msg = net_recv()
 
