@@ -1,6 +1,7 @@
 
 Class = require "hump.class"
 vector = require "hump.vector"
+json = require "json"
 
 Ship = Class{}
 
@@ -23,23 +24,23 @@ function Ship:update(dt)
 end
 
 function Ship:serialize()
-    return string.format('%f %f %f %f %f %f',
-        self.p.x, self.p.y,
-        self.v.x, self.v.y,
-        self.rot,
-        self.thrust)
+    return json.encode({
+        px = self.p.x, py = self.p.y,
+        vx = self.v.x, vy = self.v.y,
+        rot = self.rot,
+        thrust = self.thrust
+    })
 end
 
 function Ship:deserialize(srl)
     -- TODO: Lag correction/prediction here!
-    local px, py, vx, vy, rot, thrust = srl:match(
-        '^(%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*) (%-?[%d.e]*)$')
+    data = json.decode(srl)
 
-    self.p.x, self.p.y = tonumber(px), tonumber(py)
-    self.v.x, self.v.y = tonumber(vx), tonumber(vy)
+    self.p.x, self.p.y = tonumber(data.px), tonumber(data.py)
+    self.v.x, self.v.y = tonumber(data.vx), tonumber(data.vy)
 
-    self.rot = tonumber(rot)
-    self.thrust = tonumber(thrust)
+    self.rot = tonumber(data.rot)
+    self.thrust = tonumber(data.thrust)
 end
 
 function Ship:draw()
