@@ -25,6 +25,7 @@ end
 
 function Ship:serialize()
     return json.encode({
+        _type = 'ship',
         px = self.p.x, py = self.p.y,
         vx = self.v.x, vy = self.v.y,
         rot = self.rot,

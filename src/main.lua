@@ -63,15 +63,15 @@ function game:update(dt)
 
     local turn, thrust = 0, 0
 
-    if world.ships[client_id] ~= nil then
+    if world.actors[client_id] ~= nil then
         if love.keyboard.isDown('up') then thrust = thrust + 50
         end
-        world.ships[client_id].thrust = thrust
+        world.actors[client_id].thrust = thrust
 
         if     love.keyboard.isDown('left')  then turn = turn - 1.5
         elseif love.keyboard.isDown('right') then turn = turn + 1.5
         end
-        world.ships[client_id].turn = turn
+        world.actors[client_id].turn = turn
     end
 
     t = t + dt

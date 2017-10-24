@@ -44,13 +44,24 @@ function run_websock(ws)
             elseif cmd == 'input' then
                 world:client_msg(ws.id, params)
             elseif cmd == 'update' then
-                for id, ship in pairs(world.ships) do
-                    sendfmt(ws, 'up_ship %d %s', id, ship:serialize())
+                for id, actor in pairs(world.actors) do
+                    if ws.actors[id] == nil then
+                        sendfmt(ws, 'new_actor %d -', id)
+                        ws.actors[id] = actor
+                    end
+                end
+                for id, actor in pairs(ws.actors) do
+                    if world.actors[id] ~= nil then
+                        sendfmt(ws, 'up_actor %d %s', id, world.actors[id]:serialize())
+                    else
+                        sendfmt(ws, 'del_actor %d -', id)
+                    end
                 end
             end
         else
             if ws.id ~= nil then
                 print(string.format('Client %s disconnected', ws.id))
+                world:user_left(ws.id)
             end
             ws:close()
             return
