@@ -3,6 +3,9 @@ Class = require "hump.class"
 vector = require "hump.vector"
 json = require "json"
 
+actorfactory = require "game.actorfactory"
+
+
 Ship = Class{}
 
 function Ship:init(owner, x, y)
@@ -14,6 +17,8 @@ function Ship:init(owner, x, y)
 
     self.thrust = 0
     self.turn = 0
+
+    self.atype = 'ship'
 end
 
 function Ship:update(dt)
@@ -25,7 +30,6 @@ end
 
 function Ship:serialize()
     return json.encode({
-        _type = 'ship',
         px = self.p.x, py = self.p.y,
         vx = self.v.x, vy = self.v.y,
         rot = self.rot,
@@ -58,4 +62,5 @@ function Ship:draw()
     love.graphics.pop()
 end
 
+actorfactory.register('ship', Ship)
 return Ship

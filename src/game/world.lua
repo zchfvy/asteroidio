@@ -1,6 +1,7 @@
 
 Class = require "hump.class"
 
+actorfactory = require "game.actorfactory"
 Ship = require "game.ship"
 
 World = Class{}
@@ -43,8 +44,8 @@ function World:net_update(data)
     local ent = tonumber(ent)
 
     if cmd == 'new_actor' then
-        -- TODO : all actors are ship right now
-        self.actors[ent] = Ship(ent)
+        self.actors[ent] = actorfactory.spawn(params, ent)
+        print('New actor of type '..params)
     elseif cmd == 'up_actor' then
         self.actors[ent]:deserialize(params)
     elseif cmd == 'del_actor' then

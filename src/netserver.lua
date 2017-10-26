@@ -46,7 +46,7 @@ function run_websock(ws)
             elseif cmd == 'update' then
                 for id, actor in pairs(world.actors) do
                     if ws.actors[id] == nil then
-                        sendfmt(ws, 'new_actor %d -', id)
+                        sendfmt(ws, 'new_actor %d %s', id, actor.atype)
                         ws.actors[id] = actor
                     end
                 end
