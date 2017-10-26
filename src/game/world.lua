@@ -45,7 +45,6 @@ function World:net_update(data)
 
     if cmd == 'new_actor' then
         self.actors[ent] = actorfactory.spawn(params, ent)
-        print('New actor of type '..params)
     elseif cmd == 'up_actor' then
         self.actors[ent]:deserialize(params)
     elseif cmd == 'del_actor' then
