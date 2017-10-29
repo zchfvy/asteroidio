@@ -5,7 +5,7 @@ json = require "json"
 
 actorfactory = require "game.actorfactory"
 
-
+local ATYPE = 'ship'
 Ship = Class{}
 
 function Ship:init(owner, x, y)
@@ -18,7 +18,7 @@ function Ship:init(owner, x, y)
     self.thrust = 0
     self.turn = 0
 
-    self.atype = 'ship'
+    self.atype = ATYPE
 end
 
 function Ship:update(dt)
@@ -62,5 +62,5 @@ function Ship:draw()
     love.graphics.pop()
 end
 
-actorfactory.register('ship', Ship)
+actorfactory.register(ATYPE, Ship)
 return Ship
