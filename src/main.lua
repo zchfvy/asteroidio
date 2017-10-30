@@ -38,6 +38,7 @@ function connecting:update(dt)
                 client_id = tonumber(client_id)
                 wx, wy = tonumber(wx), tonumber(wy)
                 world = World(wx, wy)
+                world.local_user_id = client_id
                 love.window.setMode(wx, wy)
                 print('Connected as '..client_id)
                 Gamestate.switch(game)
@@ -63,15 +64,16 @@ function game:update(dt)
 
     local turn, thrust = 0, 0
 
-    if world.actors[client_id] ~= nil then
+    local_ship = world:get_local_ship()
+    if local_ship ~= nil then
         if love.keyboard.isDown('up') then thrust = thrust + 50
         end
-        world.actors[client_id].thrust = thrust
+        local_ship.thrust = thrust
 
         if     love.keyboard.isDown('left')  then turn = turn - 1.5
         elseif love.keyboard.isDown('right') then turn = turn + 1.5
         end
-        world.actors[client_id].turn = turn
+        local_ship.turn = turn
     end
 
     t = t + dt

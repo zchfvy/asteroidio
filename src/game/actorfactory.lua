@@ -6,8 +6,8 @@ function af_register(atype, cons)
     classes[atype] = cons
 end
 
-function af_spawn(atype, id)
-    return classes[atype](id)
+function af_spawn(atype)
+    return classes[atype]()
 end
 
 factory = {

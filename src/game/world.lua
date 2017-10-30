@@ -8,6 +8,9 @@ World = Class{}
 
 function World:init(w, h)
     self.actors = {}
+    self.users = {}
+    self.local_user_id = nil
+    self.local_ship_id = nil
     self.w = w
     self.h = h
 end
@@ -30,12 +33,23 @@ function World:draw()
     end
 end
 
-function World:add_ship(user)
-    self.actors[user] = Ship(user)
+function World:user_joined(user)
+    self.users[user] = {}
 end
 
 function World:user_left(user)
-    self.actors[user] = ni;
+    ship = self.users[user]['ship']
+    if ship ~= nil then
+        self.actors[ship] = nil
+    end
+    self.users[user] = nil;
+end
+
+function World:get_local_ship()
+    if self.local_ship_id ~= nil then
+        return self.actors[self.local_ship_id]
+    end
+    return nil
 end
 
 function World:net_update(data)
@@ -44,24 +58,45 @@ function World:net_update(data)
     local ent = tonumber(ent)
 
     if cmd == 'new_actor' then
-        self.actors[ent] = actorfactory.spawn(params, ent)
+        atype, state = params:match('^(%S*) (.*)')
+        self.actors[ent] = actorfactory.spawn(atype)
+        act = self.actors[ent]
+        act:deserialize(state)
+
+        print(string.format('New Actor %d(%s) Owner: %d', ent, atype, act.owner))
+
+        if atype == Ship.atype and act.owner == self.local_user_id then
+            self.local_ship_id = ent
+        end
     elseif cmd == 'up_actor' then
         self.actors[ent]:deserialize(params)
     elseif cmd == 'del_actor' then
         self.actors[ent] = nil
+        if ent == self.local_ship_id then
+            self.local_ship_id = nil
+        end
     end
 end
 
 function World:client_msg(user, data)
     -- Receives a packet from the net (server only!)
     local cmd, params = data:match('^(%S*) (.*)')
+
     if cmd == 'ship_ctrl' then
-        local turn, thrust = params:match('^(%-?[%de.]*) (%-?[%de.]*)')
-        self.actors[user].thrust = tonumber(thrust)
-        self.actors[user].turn = tonumber(turn)
+        ship = self.users[user].ship
+        if ship ~= nil then
+            local turn, thrust = params:match('^(%-?[%de.]*) (%-?[%de.]*)')
+            self.actors[ship].thrust = tonumber(thrust)
+            self.actors[ship].turn = tonumber(turn)
+        end
     end
     if cmd == 'spawn' then
-        self.actors[user] = Ship(user)
+        if self.users[user].ship == nil then
+            ship = #(self.actors) + 1
+            self.actors[ship] = Ship(user)
+            self.users[user].ship = ship
+            print(string.format('Spawning ship %d for user %d', ship, user))
+        end
     end
 end
 

@@ -34,6 +34,7 @@ function run_websock(ws)
             if cmd == 'join' and ws.id == nil then
                 ws.id = math.random(999999)
                 ws.actors = {}
+                world:user_joined(ws.id)
                 print('New Client '..ws.id)
             end
 
@@ -46,7 +47,7 @@ function run_websock(ws)
             elseif cmd == 'update' then
                 for id, actor in pairs(world.actors) do
                     if ws.actors[id] == nil then
-                        sendfmt(ws, 'new_actor %d %s', id, actor.atype)
+                        sendfmt(ws, 'new_actor %d %s %s', id, actor.atype, actor:serialize())
                         ws.actors[id] = actor
                     end
                 end

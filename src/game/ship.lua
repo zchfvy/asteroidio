@@ -5,11 +5,11 @@ json = require "json"
 
 actorfactory = require "game.actorfactory"
 
-local ATYPE = 'ship'
 Ship = Class{}
+Ship.atype = 'ship'
 
-function Ship:init(owner, x, y)
-    self.owner = owner
+function Ship:init(owner)
+    self.owner = owner or nil
 
     self.p = vector(x or 0, y or 0)
     self.v = vector(0, 0)
@@ -18,7 +18,7 @@ function Ship:init(owner, x, y)
     self.thrust = 0
     self.turn = 0
 
-    self.atype = ATYPE
+    self.atype = Ship.atype
 end
 
 function Ship:update(dt)
@@ -33,7 +33,8 @@ function Ship:serialize()
         px = self.p.x, py = self.p.y,
         vx = self.v.x, vy = self.v.y,
         rot = self.rot,
-        thrust = self.thrust
+        thrust = self.thrust,
+        owner = self.owner
     })
 end
 
@@ -46,6 +47,8 @@ function Ship:deserialize(srl)
 
     self.rot = tonumber(data.rot)
     self.thrust = tonumber(data.thrust)
+
+    self.owner = tonumber(data.owner)
 end
 
 function Ship:draw()
@@ -62,5 +65,5 @@ function Ship:draw()
     love.graphics.pop()
 end
 
-actorfactory.register(ATYPE, Ship)
+actorfactory.register(Ship.atype, Ship)
 return Ship
