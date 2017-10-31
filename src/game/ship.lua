@@ -21,6 +21,10 @@ function Ship:init(owner)
     self.atype = Ship.atype
 end
 
+function Ship:get_forward()
+    return vector.fromPolar(self.rot, 1)
+end
+
 function Ship:update(dt)
     self.rot = self.rot + self.turn * dt
     local accel = vector.fromPolar(self.rot, self.thrust)

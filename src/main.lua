@@ -74,6 +74,10 @@ function game:update(dt)
         elseif love.keyboard.isDown('right') then turn = turn + 1.5
         end
         local_ship.turn = turn
+
+        if love.keyboard.isDown('x') then
+            net_send('input shoot 0')
+        end
     end
 
     t = t + dt

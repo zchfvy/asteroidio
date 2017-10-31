@@ -3,6 +3,7 @@ Class = require "hump.class"
 
 actorfactory = require "game.actorfactory"
 Ship = require "game.ship"
+Bullet = require "game.bullet"
 
 World = Class{}
 
@@ -88,6 +89,16 @@ function World:client_msg(user, data)
             local turn, thrust = params:match('^(%-?[%de.]*) (%-?[%de.]*)')
             self.actors[ship].thrust = tonumber(thrust)
             self.actors[ship].turn = tonumber(turn)
+        end
+    end
+    if cmd == 'shoot' then
+        ship = self.users[user].ship
+        if ship ~= nil then
+            bullet = Bullet(user)
+            ship = self.actors[ship]
+            self.actors[#(self.actors) + 1] = bullet
+            bullet.p = ship.p
+            bullet.v = ship:get_forward() * 100
         end
     end
     if cmd == 'spawn' then
