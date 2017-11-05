@@ -96,9 +96,12 @@ function World:client_msg(user, data)
         if ship ~= nil then
             bullet = Bullet(user)
             ship = self.actors[ship]
-            self.actors[#(self.actors) + 1] = bullet
-            bullet.p = ship.p
-            bullet.v = ship:get_forward() * 100
+            if ship.shot_cooldown < 0 then
+                self.actors[#(self.actors) + 1] = bullet
+                bullet.p = ship.p
+                bullet.v = ship:get_forward() * 100
+                ship.shot_cooldown = ship.fire_rate
+            end
         end
     end
     if cmd == 'spawn' then

@@ -18,6 +18,9 @@ function Ship:init(owner)
     self.thrust = 0
     self.turn = 0
 
+    self.shot_cooldown = 0
+    self.fire_rate = 0.5
+
     self.atype = Ship.atype
 end
 
@@ -30,6 +33,8 @@ function Ship:update(dt)
     local accel = vector.fromPolar(self.rot, self.thrust)
     self.v = self.v + accel * dt
     self.p = self.p + self.v * dt
+
+    self.shot_cooldown = self.shot_cooldown - dt
 end
 
 function Ship:serialize()
