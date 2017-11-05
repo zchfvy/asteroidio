@@ -14,10 +14,17 @@ function Bullet:init(owner)
 
     self.p = vector(0, 0)
     self.v = vector(0, 0)
+
+    self.life = 5
 end
 
 function Bullet:update(dt)
     self.p = self.p + self.v * dt
+    self.life = self.life - dt
+
+    if self.life < 0 then
+        self.destroy = true
+    end
 end
 
 function Bullet:draw()

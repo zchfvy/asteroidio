@@ -18,12 +18,21 @@ end
 
 function World:update(dt)
     -- Update the simulation
-    for _, actor in pairs(self.actors) do
+    dead_actors = {}
+    for id, actor in pairs(self.actors) do
         actor:update(dt)
+
         if actor.p.x > self.w then actor.p.x = actor.p.x - self.w end
         if actor.p.x < 0      then actor.p.x = actor.p.x + self.w end
         if actor.p.y > self.h then actor.p.y = actor.p.y - self.h end
         if actor.p.y < 0      then actor.p.y = actor.p.y + self.h end
+        if actor.destroy then
+            dead_actors[id] = id
+        end
+    end
+
+    for id, actor in pairs(dead_actors) do
+        self.actors[id] = nil
     end
 end
 
