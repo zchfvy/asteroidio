@@ -53,7 +53,8 @@ function run_websock(ws)
                 end
                 removed = {}
                 for id, actor in pairs(ws.actors) do
-                    if world.actors[id] ~= nil then
+                    if actor.net_temporary then -- do nothing
+                    elseif world.actors[id] ~= nil then
                         sendfmt(ws, 'up_actor %d %s', id, world.actors[id]:serialize())
                     else
                         sendfmt(ws, 'del_actor %d -', id)

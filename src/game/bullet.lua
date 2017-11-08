@@ -10,6 +10,8 @@ Bullet = Class{}
 Bullet.atype = 'bullet'
 
 function Bullet:init(owner)
+    self.net_temporary = true
+
     self.owner = owner
 
     self.p = vector(0, 0)
